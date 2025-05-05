@@ -1,4 +1,9 @@
 @extends('admin.layout')
+@push('style')
+
+<link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet">    
+@endpush
+
 
 @section('main')
 <div class="row mt-4 mb-4 g-4">
@@ -18,7 +23,7 @@
                 </div>
             @endif
 
-            <form action="{{ route('admin.products.store') }}" method="POST" enctype="multipart/form-data">
+            <form id="createForm" action="{{ route('admin.products.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
         
                 <div class="mb-3">
@@ -54,7 +59,10 @@
         
                 <div class="mb-3">
                     <label for="description" class="form-label">Description</label>
-                    <textarea name="description" id="description" class="form-control @error('description') is-invalid @enderror" rows="3">{{ old('description') }}</textarea>
+                    <textarea name="description" id="description" class="form-control d-non @error('description') is-invalid @enderror" rows="3">{{ old('description') }}</textarea>
+                    
+                    <div id="editor"  style="height: 300px" class="bg-white"></div>
+
                     @error('description')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
@@ -117,4 +125,30 @@
         </div>
     </div>
 </div>
+
+@push('scripts')
+
+<script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
+
+
+<script>
+    const quill = new Quill('#editor', {
+      theme: 'snow'
+    });
+
+    document.querySelector("#createForm").addEventListener('submit' , function(e) {
+        e.preventDefault();
+
+        const textArea = document.querySelector("#description");
+
+        const html = quill.getSemanticHTML();
+
+        textArea.value = html;
+
+        document.querySelector("#createForm").submit();
+
+    });
+  </script>
+    
+@endpush
 @endsection

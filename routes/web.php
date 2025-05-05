@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\admin\AdminController;
+use App\Http\Controllers\admin\CategoryController;
 use App\Http\Controllers\admin\ProductController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ShopController;
@@ -35,4 +36,12 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
     Route::post("/product/store", [ProductController::class, 'store'])->name('admin.products.store');
     Route::get("/product/edit", [ProductController::class, 'edit'])->name('admin.products.edit');
     Route::post("/product/destroy", [ProductController::class, 'delete'])->name('admin.products.destroy');
+
+    //categories
+    Route::get("/categories", [CategoryController::class, 'index'])->name('admin.cat');
+    Route::get("/category/create", [CategoryController::class, 'create'])->name('cat.create');
+    Route::post("/category/store", [CategoryController::class, 'store'])->name('cat.store');
+    Route::get("/category/delete/{id}", [CategoryController::class, 'destroy'])->name('cat.delete');
+
+    Route::post("/category/update", [CategoryController::class, 'update'])->name('cat.update');
 });
